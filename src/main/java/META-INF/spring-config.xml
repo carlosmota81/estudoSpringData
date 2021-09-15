@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans default-lazy-init="true" xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd" xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:context="http://www.springframework.org/schema/context" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans">
+
+<!-- Ativa recursos automáticos no Spring como Injeção de Dependecia por anotações -->
+
+
+<context:annotation-config/>
+
+<context:component-scan base-package="projeto.spring.data.model"/>
+
+<!-- Define o DataSource e a conexão com o banco de dados -->
+
+
+
+<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
+
+<property value="org.postgresql.Driver" name="driverClassName"/>
+
+<property value="jdbc:postgresql://localhost:5432/spring-data-teste" name="url"/>
+
+<property value="postgres" name="username"/>
+
+<property value="admin" name="password"/>
+
+</bean>
+
+<!-- Define as configurações do JPA -->
+
+
+
+<bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory" scope="singleton">
+
+<property name="dataSource" ref="dataSource"/>
+
+
+<property name="jpaVendorAdapter">
+
+
+<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+
+<property value="POSTGRESQL" name="database"/>
+
+<property value="true" name="generateDdl"/>
+
+<!-- Gerar as tabelas no banco -->
+
+
+</bean>
+
+</property>
+
+<property value="projeto-spring-data" name="persistenceUnitName"/>
+
+</bean>
+
+<!-- Ativa o controle transacional -->
+
+
+
+<bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager" scope="singleton">
+
+<property name="entityManagerFactory" ref="entityManagerFactory"/>
+
+</bean>
+
+<!-- Ativa os recursos para os Repository -->
+
+
+<jpa:repositories base-package="projeto.spring.data.dao"/>
+
+</beans>
